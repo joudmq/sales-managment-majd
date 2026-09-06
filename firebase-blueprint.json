@@ -1,0 +1,208 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cosmetics and Medical Clinic Inventory & Invoicing Schema",
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Medical & cosmetics product with multi-tier pricing and stock levels",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "sku": { "type": "string" },
+        "description": { "type": "string" },
+        "costPrice": { "type": "number" },
+        "retailPrice": { "type": "number" },
+        "wholesalePrice": { "type": "number" },
+        "clinicPrice": { "type": "number" },
+        "currentQuantity": { "type": "number" },
+        "minQuantityAlert": { "type": "number" },
+        "category": { "type": "string" },
+        "supplierId": { "type": "string" },
+        "supplierName": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "retailPrice", "currentQuantity"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Customer profile with price tiers, contact info, and ledger balance",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "address": { "type": "string" },
+        "defaultPriceTier": { "type": "string", "enum": ["retail", "wholesale", "clinic"] },
+        "balance": { "type": "number" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "phone", "defaultPriceTier"]
+    },
+    "Supplier": {
+      "title": "Supplier",
+      "description": "Vendor or pharmaceutical supplier details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "company": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "address": { "type": "string" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "phone"]
+    },
+    "Invoice": {
+      "title": "Invoice",
+      "description": "Sales invoice with line items, payments, status, and PDF snapshots",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "invoiceNumber": { "type": "string" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "customerAddress": { "type": "string" },
+        "date": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "priceTier": { "type": "string", "enum": ["retail", "wholesale", "clinic"] },
+        "items": { "type": "array" },
+        "subtotal": { "type": "number" },
+        "discount": { "type": "number" },
+        "tax": { "type": "number" },
+        "total": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "remainingAmount": { "type": "number" },
+        "status": { "type": "string", "enum": ["paid", "partial", "unpaid", "cancelled"] },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "invoiceNumber", "customerId", "customerName", "date", "total", "status"]
+    },
+    "StockMovement": {
+      "title": "StockMovement",
+      "description": "Audit trail log of all inventory movements with running balance",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "productId": { "type": "string" },
+        "productName": { "type": "string" },
+        "sku": { "type": "string" },
+        "quantity": { "type": "number" },
+        "type": { "type": "string", "enum": ["in", "out", "adjustment", "return"] },
+        "costPrice": { "type": "number" },
+        "invoiceId": { "type": "string" },
+        "invoiceNumber": { "type": "string" },
+        "supplierId": { "type": "string" },
+        "supplierName": { "type": "string" },
+        "supplierInvoiceNumber": { "type": "string" },
+        "date": { "type": "string" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "previousStock": { "type": "number" },
+        "remainingStock": { "type": "number" }
+      },
+      "required": ["id", "productId", "productName", "quantity", "type", "date"]
+    },
+    "CustomerPayment": {
+      "title": "CustomerPayment",
+      "description": "Recorded customer payments applied towards debt and invoices",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string" },
+        "paymentMethod": { "type": "string" },
+        "notes": { "type": "string" },
+        "invoiceId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "customerId", "customerName", "amount", "date"]
+    },
+    "AppSettings": {
+      "title": "AppSettings",
+      "description": "Global store and company settings, invoice header, currency, taxes",
+      "type": "object",
+      "properties": {
+        "companyName": { "type": "string" },
+        "companySubtitle": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "address": { "type": "string" },
+        "taxNumber": { "type": "string" },
+        "commercialRegister": { "type": "string" },
+        "currency": { "type": "string" },
+        "currencySymbol": { "type": "string" },
+        "invoiceNotes": { "type": "string" },
+        "termsAndConditions": { "type": "string" },
+        "taxRate": { "type": "number" },
+        "enableTax": { "type": "boolean" },
+        "logo": { "type": "string" }
+      }
+    },
+    "UserAccount": {
+      "title": "UserAccount",
+      "description": "System user account with role-based access control and credentials",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "username": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "accountant", "sales", "inventory"] },
+        "password": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "avatarColor": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "permissions": { "type": "object" },
+        "createdAt": { "type": "string" },
+        "lastLoginAt": { "type": "string" }
+      },
+      "required": ["id", "username", "name", "role", "isActive"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Collection of all inventory products"
+    },
+    "/customers/{customerId}": {
+      "schema": "Customer",
+      "description": "Collection of customer accounts"
+    },
+    "/suppliers/{supplierId}": {
+      "schema": "Supplier",
+      "description": "Collection of suppliers"
+    },
+    "/invoices/{invoiceId}": {
+      "schema": "Invoice",
+      "description": "Collection of sales invoices"
+    },
+    "/stockMovements/{movementId}": {
+      "schema": "StockMovement",
+      "description": "Collection of stock movement logs"
+    },
+    "/customerPayments/{paymentId}": {
+      "schema": "CustomerPayment",
+      "description": "Collection of customer payments"
+    },
+    "/settings/{settingId}": {
+      "schema": "AppSettings",
+      "description": "Application settings documents"
+    },
+    "/users/{userId}": {
+      "schema": "UserAccount",
+      "description": "Collection of system user accounts"
+    }
+  }
+}

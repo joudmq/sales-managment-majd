@@ -1,0 +1,7 @@
+{
+  "name": "نظام إدارة المبيعات والمخزون",
+  "description": "نظام متكامل وسهل لإدارة المنتجات، المخزون، أسعار العملاء، المبيعات، الفواتير، التحصيلات، والأرباح بالريال/الشيكل ₪",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
